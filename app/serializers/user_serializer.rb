@@ -1,4 +1,4 @@
 class UserSerializer < ActiveModel::Serializer
-  # attributes :id
+  attributes :id # comment this out?
   attributes :username
 end
