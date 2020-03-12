@@ -1,35 +1,15 @@
 class Api::V1::UsersController < ApplicationController
-
-  def index
-    @users = User.all
-    render json: @users, status: 200
-  end
-
-  def show
-    @user = User.find(params[:id])
-    render json: @user, status: 200
-  end
-
   def create
     @user = User.create(user_params)
-    render json: @user, status: 200
+    if @user.valid?
+      render json: { user: UserSerializer.new(@user) }, status: :created
+    else
+      render json: { error: 'failed to create user' }, status: :not_acceptable
+    end
   end
-
-  def update
-    @user = User.find(params[:id])
-    @user.update(params[:id])
-    render json: @user, status: 200
-  end
-
-  def destroy
-    @user = User.find(params[:id])
-    @user.delete
-    render json: {userId: user.id}
-  end
-
 
   private
   def user_params
-    params.require(:user).permit(:user, :password)
+    params.require(:user).permit(:username, :password, :bio, :avatar)
   end
 end
